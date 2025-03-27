@@ -91,6 +91,10 @@ class MainActivity : AppCompatActivity() {
             zapretStatusCard.text = getString(R.string.su_not_found)
         }
 
+        fun installZip() {
+            val outputCMD = listOf("su", "-c", "magisk", "--install-module", "/sdcard/download/zapret_magisk.zip").runCommand(File("/sdcard"))
+            textTester1.text = outputCMD
+        }
 
         fun downloadStarter(fileUrl: String, fileName: String) {
             val request = DownloadManager.Request(fileUrl.toUri())
@@ -101,6 +105,8 @@ class MainActivity : AppCompatActivity() {
 
             val downloadManager = this.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
                 downloadManager.enqueue(request)
+
+            installZip()
         }
 
         fun downloadAlert(title: String, message: String, positiveButton: String, neutralButton: String, negativeButton: String, fileUrlPositive: String, fileUrlNegative: String, fileName: String) {
@@ -132,9 +138,6 @@ class MainActivity : AppCompatActivity() {
 
 
             downloadAlert(zapretDownloadTitle, zapretDownloadMessage, zapretDownloadPositive, zapretDownloadNatural, zapretDownloadNegative, zapretDownloadPositiveUrl, zapretDownloadNegativeUrl, zapretDownloadFileName)
-
-            val outputCMD = listOf("su", "-c", "magisk", "--install-module", "/sdcard/download/zapret_magisk.zip").runCommand(File("/sdcard"))
-            textTester1.text = outputCMD
             if (checkZapretFile()) {
                 zapretCheckStatus()
             } else {
