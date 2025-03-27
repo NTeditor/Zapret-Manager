@@ -1,7 +1,10 @@
 package ru.nteditor.zapretkotlin
 
 
+import android.app.DownloadManager
+import android.content.Context
 import android.os.Bundle
+import android.os.Environment
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -11,6 +14,8 @@ import androidx.core.view.WindowInsetsCompat
 import java.io.File
 import java.io.IOException
 import java.util.concurrent.TimeUnit
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import androidx.core.net.toUri
 
 class MainActivity : AppCompatActivity() {
 
@@ -64,8 +69,9 @@ class MainActivity : AppCompatActivity() {
 
             } else {
                 val zapretStatus = getString(R.string.zapret_status_enable)
+                val zapretStatusPid = getString(R.string.zapret_status_pid)
                 zapretStatusCard.text = zapretStatus
-                zapretPidText.text = "pid: $zapretStatusCMD"
+                zapretPidText.text = "$zapretStatusPid $zapretStatusCMD"
             }
 
 
@@ -84,6 +90,58 @@ class MainActivity : AppCompatActivity() {
         } else {
             zapretStatusCard.text = getString(R.string.su_not_found)
         }
+
+
+        fun downloadStarter(fileUrl: String, fileName: String) {
+            val request = DownloadManager.Request(fileUrl.toUri())
+                .setTitle(fileName)
+                .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
+                .setAllowedOverMetered(true)
+
+            val downloadManager = this.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+                downloadManager.enqueue(request)
+        }
+
+        fun downloadAlert(title: String, message: String, positiveButton: String, neutralButton: String, negativeButton: String, fileUrlPositive: String, fileUrlNegative: String, fileName: String) {
+            MaterialAlertDialogBuilder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setCancelable(true)
+                .setPositiveButton(positiveButton)
+                { dialog, _ -> downloadStarter(fileUrlPositive, fileName)
+                    dialog.dismiss() }
+                .setNeutralButton(neutralButton)
+                { dialog, _ -> dialog.dismiss() }
+                .setNegativeButton(negativeButton)
+                { dialog, _ -> downloadStarter(fileUrlNegative, fileName)
+                    dialog.dismiss() }
+                .show()
+        }
+
+        fun zapretInstaller() {
+            val zapretDownloadTitle = getString(R.string.zapret_download_title)
+            val zapretDownloadMessage = getString(R.string.zapret_download_message)
+            val zapretDownloadPositive = getString(R.string.zapret_download_positive)
+            val zapretDownloadNatural = getString(R.string.zapret_download_neutral)
+            val zapretDownloadNegative = getString(R.string.zapret_download_negative)
+            val zapretDownloadFileName = getString(R.string.zapret_download_file_name)
+
+            val zapretDownloadPositiveUrl = "https://github.com/ImMALWARE/zapret-magisk/releases/latest/download/zapret_module.zip"
+            val zapretDownloadNegativeUrl = "https://github.com/BAGAbball/zapret-magisk/releases/latest/download/zapret_module.zip"
+
+
+            downloadAlert(zapretDownloadTitle, zapretDownloadMessage, zapretDownloadPositive, zapretDownloadNatural, zapretDownloadNegative, zapretDownloadPositiveUrl, zapretDownloadNegativeUrl, zapretDownloadFileName)
+
+            val outputCMD = listOf("su", "-c", "magisk", "--install-module", "/sdcard/download/zapret_magisk.zip").runCommand(File("/sdcard"))
+            textTester1.text = outputCMD
+            if (checkZapretFile()) {
+                zapretCheckStatus()
+            } else {
+                zapretStatusCard.text = getString(R.string.zapret_not_found)
+            }
+        }
+
 
 
         zapretButtonStart.setOnClickListener {
@@ -117,7 +175,12 @@ class MainActivity : AppCompatActivity() {
             } else {
                 zapretStatusCard.text = getString(R.string.su_not_found)
             }
-
         }
+
+        downloadButton.setOnClickListener {
+            zapretInstaller()
+        }
+
+
     }
 }

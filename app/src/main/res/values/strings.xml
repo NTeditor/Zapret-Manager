@@ -8,5 +8,12 @@
     <string name="zapret_status_disable">Zapret is disable</string>
     <string name="su_not_found">SU file not found</string>
     <string name="zapret_not_found">Zapret file not found</string>
+    <string name="zapret_status_pid">pid:</string>
     <string name="placeholder_text">Placeholder 1</string>
+    <string name="zapret_download_title">Zapret Download</string>
+    <string name="zapret_download_message">b</string>
+    <string name="zapret_download_positive">By imMalware</string>
+    <string name="zapret_download_negative">By BAGAbball</string>
+    <string name="zapret_download_neutral">Cancel</string>
+    <string name="zapret_download_file_name">zapret_magisk.zip</string>
 </resources>
