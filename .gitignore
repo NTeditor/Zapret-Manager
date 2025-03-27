@@ -13,6 +13,7 @@
 /.gradle/
 /.idea/
 *.apk
+/app/release
 /.idea/*
 /captures
 .externalNativeBuild
