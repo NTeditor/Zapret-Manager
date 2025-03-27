@@ -8,4 +8,5 @@
     <string name="zapret_status_disable">Zapret is disable</string>
     <string name="su_not_found">SU file not found</string>
     <string name="zapret_not_found">Zapret file not found</string>
+    <string name="placeholder_text">Placeholder 1</string>
 </resources>

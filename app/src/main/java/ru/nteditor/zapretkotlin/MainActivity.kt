@@ -56,24 +56,24 @@ class MainActivity : AppCompatActivity() {
         val zapretButtonStop = findViewById<Button>(R.id.zapretButtonStop)
         val zapretButtonStart = findViewById<Button>(R.id.zapretButtonStart)
         val zapretStatusCard = findViewById<TextView>(R.id.zapretStatusCard)
+        val zapretPidText = findViewById<TextView>(R.id.zapretPidText)
 
 
 
         fun zapretCheckStatus() {
-            if (checkZapretFile()) {
-                val zapretStatusCMD = listOf("su", "-c", "pidof", "nfqws").runCommand(File("/system/bin"))
-                if (zapretStatusCMD == "") {
-                    val zapretStatus = getString(R.string.zapret_status_disable)
-                    zapretStatusCard.text = "$zapretStatus $zapretStatusCMD"
-                    textTester1.text = zapretStatusCMD
+            val zapretStatusCMD =
+                listOf("su", "-c", "pidof", "nfqws").runCommand(File("/system/bin"))
+            if (zapretStatusCMD == "") {
+                val zapretStatus = getString(R.string.zapret_status_disable)
+                zapretStatusCard.text = zapretStatus
+                zapretPidText.text = ""
 
-                } else {
-                    val zapretStatus = getString(R.string.zapret_status_enable)
-                    zapretStatusCard.text = "$zapretStatus $zapretStatusCMD"
-                }
             } else {
-                zapretStatusCard.text = getString(R.string.zapret_not_found)
+                val zapretStatus = getString(R.string.zapret_status_enable)
+                zapretStatusCard.text = zapretStatus
+                zapretPidText.text = "pid: $zapretStatusCMD"
             }
+
 
         }
 
@@ -82,7 +82,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (checkSUFile()) {
-            zapretCheckStatus()
+            if (checkZapretFile()) {
+                zapretCheckStatus()
+            } else {
+                zapretStatusCard.text = getString(R.string.zapret_not_found)
+            }
         } else {
             zapretStatusCard.text = getString(R.string.su_not_found)
         }
@@ -90,11 +94,17 @@ class MainActivity : AppCompatActivity() {
 
         zapretButtonStart.setOnClickListener {
             if (checkSUFile()) {
-                val outputCMD = listOf("su", "-c", "zapret", "start").runCommand(File("/system"))
-                textTester1.text = outputCMD
-                zapretCheckStatus()
+                if (checkZapretFile()) {
+                    val outputCMD = listOf("su", "-c", "zapret", "start").runCommand(File("/system"))
+                    textTester1.text = outputCMD
+                    zapretCheckStatus()
+                } else {
+                    zapretStatusCard.text = getString(R.string.zapret_not_found)
+
+                }
             } else {
                 zapretStatusCard.text = getString(R.string.su_not_found)
+
             }
 
 
@@ -103,9 +113,13 @@ class MainActivity : AppCompatActivity() {
 
         zapretButtonStop.setOnClickListener {
             if (checkSUFile()) {
-                val outputCMD = listOf("su", "-c", "zapret", "stop").runCommand(File("/system"))
-                textTester1.text = outputCMD
-                zapretCheckStatus()
+                if (checkZapretFile()) {
+                    val outputCMD = listOf("su", "-c", "zapret", "stop").runCommand(File("/system"))
+                    textTester1.text = outputCMD
+                    zapretCheckStatus()
+                } else {
+                    zapretStatusCard.text = getString(R.string.zapret_not_found)
+                }
             } else {
                 zapretStatusCard.text = getString(R.string.su_not_found)
             }
