@@ -2,7 +2,10 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="background_light">@color/material_dynamic_neutral90</color>
-    <color name="background_night">@color/material_dynamic_neutral20</color>
-    <color name="button_color">@color/material_dynamic_primary40</color>
+    <color name="background_light">@color/material_dynamic_neutral_variant90</color>
+    <color name="background_night">@color/material_dynamic_neutral_variant10</color>
+    <color name="button_color_light">@color/material_dynamic_primary40</color>
+    <color name="button_color_night">@color/material_dynamic_primary70</color>
+    <color name="card_color_light">@color/material_dynamic_primary70</color>
+    <color name="card_color_night">@color/material_dynamic_primary40</color>
 </resources>

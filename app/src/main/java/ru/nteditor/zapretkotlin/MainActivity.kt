@@ -15,7 +15,6 @@ import java.util.concurrent.TimeUnit
 class MainActivity : AppCompatActivity() {
 
 
-
     private fun List<String>.runCommand(workingDir: File): String? {
         try {
             val proc = ProcessBuilder(this)
@@ -26,20 +25,15 @@ class MainActivity : AppCompatActivity() {
 
             proc.waitFor(60, TimeUnit.MINUTES)
             return proc.inputStream.bufferedReader().readText()
-        } catch(e: IOException) {
+        } catch (e: IOException) {
             e.printStackTrace()
             return null
         }
     }
 
-    fun checkZapretFile(): Boolean {
+    private fun checkZapretFile(): Boolean {
         return File("/system/bin/zapret").exists()
     }
-
-
-
-
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         val zapretButtonStart = findViewById<Button>(R.id.zapretButtonStart)
         val zapretStatusCard = findViewById<TextView>(R.id.zapretStatusCard)
         val zapretPidText = findViewById<TextView>(R.id.zapretPidText)
-
+        val downloadButton = findViewById<TextView>(R.id.downloadButton)
 
 
         fun zapretCheckStatus() {
@@ -95,7 +89,8 @@ class MainActivity : AppCompatActivity() {
         zapretButtonStart.setOnClickListener {
             if (checkSUFile()) {
                 if (checkZapretFile()) {
-                    val outputCMD = listOf("su", "-c", "zapret", "start").runCommand(File("/system"))
+                    val outputCMD =
+                        listOf("su", "-c", "zapret", "start").runCommand(File("/system"))
                     textTester1.text = outputCMD
                     zapretCheckStatus()
                 } else {
@@ -106,7 +101,6 @@ class MainActivity : AppCompatActivity() {
                 zapretStatusCard.text = getString(R.string.su_not_found)
 
             }
-
 
 
         }
@@ -125,7 +119,5 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
-
-
     }
 }

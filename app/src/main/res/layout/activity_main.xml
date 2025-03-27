@@ -23,8 +23,7 @@
         android:id="@+id/zapretButtonStop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/button_color"
-        android:textColor="@color/white"
+        style="@style/Button_style"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="16dp"
         android:text="@string/zapret_button_stop"
@@ -35,8 +34,7 @@
         android:id="@+id/zapretButtonStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/button_color"
-        android:textColor="@color/white"
+        style="@style/Button_style"
         android:layout_marginStart="32dp"
         android:layout_marginBottom="16dp"
         android:text="@string/zapret_button_start"
@@ -45,10 +43,11 @@
 
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/main_CardView"
         android:layout_width="350dp"
         android:layout_height="140dp"
         android:layout_marginTop="40dp"
-        app:cardBackgroundColor="@color/button_color"
+        style="@style/CardView_style"
         app:cardCornerRadius="30dp"
         app:cardElevation="40dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -63,7 +62,7 @@
             android:layout_margin="30dp"
             android:text=""
             android:textColor="@color/white"
-            android:textSize="25sp" />
+            android:textSize="23sp" />
 
         <TextView
             android:id="@+id/zapretPidText"
@@ -74,6 +73,18 @@
             android:text=""
             android:textColor="@color/white"
             android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/downloadButton"
+            android:layout_gravity="end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="70dp"
+            android:layout_marginEnd="23dp"
+            style="@style/Button_style"
+            android:text="@string/zapret_button_download" />
+
+
     </androidx.cardview.widget.CardView>
 
 

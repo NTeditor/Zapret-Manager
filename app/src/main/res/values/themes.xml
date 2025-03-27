@@ -5,5 +5,13 @@
         <item name="android:windowBackground">@color/background_light</item>
     </style>
 
+    <style name="CardView_style">
+        <item name="android:backgroundTint">@color/card_color_light</item>
+    </style>
+
+    <style name="Button_style">
+        <item name="android:backgroundTint">@color/button_color_light</item>
+    </style>
+
     <style name="Theme.ZapretKotlin" parent="Base.Theme.ZapretKotlin" />
 </resources>
