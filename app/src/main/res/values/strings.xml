@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Zapret Kotlin</string>
+    <string name="zapret_button_start">Start</string>
+    <string name="zapret_button_stop">Stop</string>
+    <string name="zapret_switch_autostart">Autostart</string>
+    <string name="zapret_button_download">Download</string>
+    <string name="zapret_status_enable">Zapret is enable</string>
+    <string name="zapret_status_disable">Zapret is disable</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Zapret</string>
+    <string name="zapret_button_start">Запустить</string>
+    <string name="zapret_button_stop">Остоновить</string>
+    <string name="zapret_switch_autostart">Автозапуск</string>
+    <string name="zapret_button_download">Скачать</string>
+    <string name="zapret_status_enable">Zapret включен</string>
+    <stiring name="zapret_status_disable">Zapret выключен</stiring>
+</resources>
