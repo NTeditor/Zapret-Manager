@@ -32,6 +32,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun checkZapretFile(): Boolean {
+        return File("/system/bin/zapret").exists()
+    }
+
 
 
 
@@ -53,41 +57,58 @@ class MainActivity : AppCompatActivity() {
         val zapretButtonStart = findViewById<Button>(R.id.zapretButtonStart)
         val zapretStatusCard = findViewById<TextView>(R.id.zapretStatusCard)
 
-        fun zapretCheckStatus() {
-            var zapretStatusCMD =
-                listOf("su", "-c", "pidof", "nfqws").runCommand(File("/system/bin"))
-            if (zapretStatusCMD == "") {
-                var zapretStatus = "запрет не работает"
-                zapretStatusCard.text = zapretStatus
 
-            } else if (zapretStatusCMD == "/system/bin/sh: su: inaccessible or not found") {
-                var zapretStatus = "нет рута $zapretStatusCMD"
-                zapretStatusCard.text = zapretStatus
+
+        fun zapretCheckStatus() {
+            if (checkZapretFile()) {
+                val zapretStatusCMD = listOf("su", "-c", "pidof", "nfqws").runCommand(File("/system/bin"))
+                if (zapretStatusCMD == "") {
+                    val zapretStatus = getString(R.string.zapret_status_disable)
+                    zapretStatusCard.text = "$zapretStatus $zapretStatusCMD"
+                    textTester1.text = zapretStatusCMD
+
+                } else {
+                    val zapretStatus = getString(R.string.zapret_status_enable)
+                    zapretStatusCard.text = "$zapretStatus $zapretStatusCMD"
+                }
             } else {
-                var zapretStatus = "запрет работает"
-                zapretStatusCard.text = zapretStatus
+                zapretStatusCard.text = getString(R.string.zapret_not_found)
             }
 
         }
 
-        zapretCheckStatus()
+        fun checkSUFile(): Boolean {
+            return File("/system/bin/su").exists() || File("/system/xbin/su").exists() || File("/system/sbin/su").exists()
+        }
+
+        if (checkSUFile()) {
+            zapretCheckStatus()
+        } else {
+            zapretStatusCard.text = getString(R.string.su_not_found)
+        }
+
 
         zapretButtonStart.setOnClickListener {
-
-            val outputCMD = listOf("su", "-c", "zapret", "start").runCommand(File("/system"))
-            textTester1.text = outputCMD
-            zapretCheckStatus()
-
+            if (checkSUFile()) {
+                val outputCMD = listOf("su", "-c", "zapret", "start").runCommand(File("/system"))
+                textTester1.text = outputCMD
+                zapretCheckStatus()
+            } else {
+                zapretStatusCard.text = getString(R.string.su_not_found)
+            }
 
 
 
         }
 
         zapretButtonStop.setOnClickListener {
-            val outputCMD = listOf("su", "-c", "zapret", "stop").runCommand(File("/system"))
-            textTester1.text = outputCMD
-            zapretCheckStatus()
-
+            if (checkSUFile()) {
+                val outputCMD = listOf("su", "-c", "zapret", "stop").runCommand(File("/system"))
+                textTester1.text = outputCMD
+                zapretCheckStatus()
+            } else {
+                zapretStatusCard.text = getString(R.string.su_not_found)
+            }
 
         }
 

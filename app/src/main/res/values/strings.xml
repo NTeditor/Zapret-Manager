@@ -6,4 +6,6 @@
     <string name="zapret_button_download">Download</string>
     <string name="zapret_status_enable">Zapret is enable</string>
     <string name="zapret_status_disable">Zapret is disable</string>
+    <string name="su_not_found">SU file not found</string>
+    <string name="zapret_not_found">Zapret file not found</string>
 </resources>
