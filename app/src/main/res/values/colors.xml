@@ -8,4 +8,6 @@
     <color name="button_color_night">@color/material_dynamic_primary70</color>
     <color name="card_color_light">@color/material_dynamic_primary70</color>
     <color name="card_color_night">@color/material_dynamic_primary40</color>
+    <color name="text_light">@color/white</color>
+    <color name="btn_text_night">@color/material_dynamic_primary20</color>
 </resources>

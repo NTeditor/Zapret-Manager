@@ -17,4 +17,5 @@
     <string name="zapret_download_negative">от BAGAbball</string>
     <string name="zapret_download_neutral">Отмена</string>
     <string name="zapret_download_file_name">zapret_magisk.zip</string>
+    <string name="logs_header_text">Логи:</string>
 </resources>

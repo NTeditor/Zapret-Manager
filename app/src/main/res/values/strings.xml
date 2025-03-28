@@ -16,4 +16,5 @@
     <string name="zapret_download_negative">By BAGAbball</string>
     <string name="zapret_download_neutral">Cancel</string>
     <string name="zapret_download_file_name">zapret_magisk.zip</string>
+    <string name="logs_header_text">Logs:</string>
 </resources>

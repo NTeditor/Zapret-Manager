@@ -5,6 +5,7 @@ import android.app.DownloadManager
 import android.content.Context
 import android.os.Bundle
 import android.os.Environment
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -36,9 +37,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkZapretFile(): Boolean {
-        return File("/system/bin/zapret").exists()
-    }
+
+
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,12 +52,23 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        val textTester1 = findViewById<TextView>(R.id.textTester1)
-        val zapretButtonStop = findViewById<Button>(R.id.zapretButtonStop)
-        val zapretButtonStart = findViewById<Button>(R.id.zapretButtonStart)
-        val zapretStatusCard = findViewById<TextView>(R.id.zapretStatusCard)
-        val zapretPidText = findViewById<TextView>(R.id.zapretPidText)
-        val downloadButton = findViewById<TextView>(R.id.downloadButton)
+        val textTester1 = findViewById<TextView>(R.id.tvLogView)
+        val btnZapretStop = findViewById<Button>(R.id.btnZapretStop)
+        val btnZapretStart = findViewById<Button>(R.id.btnZapretStart)
+        val zapretStatusCard = findViewById<TextView>(R.id.tvZapretStatus)
+        val zapretPidText = findViewById<TextView>(R.id.tvZapretPid)
+        val downloadButton = findViewById<TextView>(R.id.btnDownload)
+
+        fun checkZapretFile(): Boolean {
+            fun checkZapretFileSub(): Boolean {
+                return File("/system/bin/zapret").exists()
+            }
+            if (!checkZapretFileSub()) {
+                downloadButton.visibility = View.VISIBLE
+            }
+
+            return checkZapretFileSub()
+        }
 
 
         fun zapretCheckStatus() {
@@ -91,41 +103,12 @@ class MainActivity : AppCompatActivity() {
             zapretStatusCard.text = getString(R.string.su_not_found)
         }
 
-        fun installZip() {
-            val outputCMD = listOf("su", "-c", "magisk", "--install-module", "/sdcard/download/zapret_magisk.zip").runCommand(File("/sdcard"))
-            textTester1.text = outputCMD
-        }
 
-        fun downloadStarter(fileUrl: String, fileName: String) {
-            val request = DownloadManager.Request(fileUrl.toUri())
-                .setTitle(fileName)
-                .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-                .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
-                .setAllowedOverMetered(true)
-
-            val downloadManager = this.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-                downloadManager.enqueue(request)
-
-            installZip()
-        }
-
-        fun downloadAlert(title: String, message: String, positiveButton: String, neutralButton: String, negativeButton: String, fileUrlPositive: String, fileUrlNegative: String, fileName: String) {
-            MaterialAlertDialogBuilder(this)
-                .setTitle(title)
-                .setMessage(message)
-                .setCancelable(true)
-                .setPositiveButton(positiveButton)
-                { dialog, _ -> downloadStarter(fileUrlPositive, fileName)
-                    dialog.dismiss() }
-                .setNeutralButton(neutralButton)
-                { dialog, _ -> dialog.dismiss() }
-                .setNegativeButton(negativeButton)
-                { dialog, _ -> downloadStarter(fileUrlNegative, fileName)
-                    dialog.dismiss() }
-                .show()
-        }
 
         fun zapretInstaller() {
+            if(!checkSUFile()) {
+                return
+            }
             val zapretDownloadTitle = getString(R.string.zapret_download_title)
             val zapretDownloadMessage = getString(R.string.zapret_download_message)
             val zapretDownloadPositive = getString(R.string.zapret_download_positive)
@@ -136,6 +119,41 @@ class MainActivity : AppCompatActivity() {
             val zapretDownloadPositiveUrl = "https://github.com/ImMALWARE/zapret-magisk/releases/latest/download/zapret_module.zip"
             val zapretDownloadNegativeUrl = "https://github.com/BAGAbball/zapret-magisk/releases/latest/download/zapret_module.zip"
 
+            fun downloadAlert(title: String, message: String, positiveButton: String, neutralButton: String, negativeButton: String, fileUrlPositive: String, fileUrlNegative: String, fileName: String) {
+
+                fun downloadStarter(fileUrl: String, fileName: String) {
+                    val request = DownloadManager.Request(fileUrl.toUri())
+                        .setTitle(fileName)
+                        .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                        .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
+                        .setAllowedOverMetered(true)
+
+                    val downloadManager = this.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+                    downloadManager.enqueue(request)
+
+                }
+
+                fun installZip() {
+                    val outputCMD = listOf("su", "-c", "magisk", "--install-module", "/sdcard/download/zapret_magisk.zip").runCommand(File("/sdcard"))
+                    textTester1.text = outputCMD
+                }
+
+                MaterialAlertDialogBuilder(this, R.style.Alert_style)
+                    .setTitle(title)
+                    .setMessage(message)
+                    .setCancelable(true)
+                    .setPositiveButton(positiveButton)
+                    { dialog, _ -> downloadStarter(fileUrlPositive, fileName)
+                        installZip()
+                        dialog.dismiss() }
+                    .setNeutralButton(neutralButton)
+                    { dialog, _ -> dialog.dismiss() }
+                    .setNegativeButton(negativeButton)
+                    { dialog, _ -> downloadStarter(fileUrlNegative, fileName)
+                        installZip()
+                        dialog.dismiss() }
+                    .show()
+            }
 
             downloadAlert(zapretDownloadTitle, zapretDownloadMessage, zapretDownloadPositive, zapretDownloadNatural, zapretDownloadNegative, zapretDownloadPositiveUrl, zapretDownloadNegativeUrl, zapretDownloadFileName)
             if (checkZapretFile()) {
@@ -147,7 +165,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        zapretButtonStart.setOnClickListener {
+        btnZapretStart.setOnClickListener {
             if (checkSUFile()) {
                 if (checkZapretFile()) {
                     val outputCMD =
@@ -166,7 +184,7 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-        zapretButtonStop.setOnClickListener {
+        btnZapretStop.setOnClickListener {
             if (checkSUFile()) {
                 if (checkZapretFile()) {
                     val outputCMD = listOf("su", "-c", "zapret", "stop").runCommand(File("/system"))
@@ -186,4 +204,6 @@ class MainActivity : AppCompatActivity() {
 
 
     }
+
+
 }
