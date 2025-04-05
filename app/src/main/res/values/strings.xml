@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Zapret Kotlin</string>
+    <string name="app_name">Zapret</string>
     <string name="zapret_button_start">Start</string>
     <string name="zapret_button_stop">Stop</string>
     <string name="zapret_switch_autostart">Autostart</string>
