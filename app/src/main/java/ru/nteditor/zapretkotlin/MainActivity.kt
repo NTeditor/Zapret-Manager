@@ -47,7 +47,9 @@ class MainActivity : AppCompatActivity() {
         val btnStop = findViewById<Button>(R.id.btnStop)
 
         val tvStatus = findViewById<TextView>(R.id.tvStatus)
-        val tvStatusSub = findViewById<TextView>(R.id.tvStatusSub)
+        val tvStatusPid = findViewById<TextView>(R.id.tvStatusPid)
+        val tvStatusNumber = findViewById<TextView>(R.id.tvStatusNumber)
+
 
 
         fun checkSUFile(): Boolean {
@@ -76,11 +78,13 @@ class MainActivity : AppCompatActivity() {
                     listOf("su", "-c", "pidof", "nfqws").runCommand(File("/system/bin"))
                 if (zapretStatusCMD == "") {
                     tvStatus.text = getString(R.string.zapret_status_disable)
-                    tvStatusSub.text = ""
+                    tvStatusPid.visibility = View.INVISIBLE
+                    tvStatusNumber.text = ""
 
                 } else {
                     tvStatus.text = getString(R.string.zapret_status_enable)
-                    tvStatusSub.text = "pid: $zapretStatusCMD"
+                    tvStatusPid.visibility = View.VISIBLE
+                    tvStatusNumber.text = zapretStatusCMD
                 }
             } else {
                 //btnDownload.visibility = View.VISIBLE
@@ -125,6 +129,8 @@ class MainActivity : AppCompatActivity() {
                     .runCommand(File("/system")).toString())
             updateStatus()
         }
+
+
 
         btnDownload.setOnClickListener {
 

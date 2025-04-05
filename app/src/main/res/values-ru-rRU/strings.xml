@@ -12,4 +12,5 @@
     <string name="zapret_alert_start">Zapret запущен</string>
     <string name="zapret_alert_stop">Zapret остановлен</string>
     <string name="alert_close">Закрыть</string>
+    <string name="pid">pid:</string>
 </resources>
