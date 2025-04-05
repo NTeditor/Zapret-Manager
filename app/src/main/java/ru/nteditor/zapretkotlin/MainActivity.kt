@@ -6,14 +6,12 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.io.File
 import java.io.IOException
-import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,7 +24,7 @@ class MainActivity : AppCompatActivity() {
                 .redirectError(ProcessBuilder.Redirect.PIPE)
                 .start()
 
-            proc.waitFor(60, TimeUnit.MINUTES)
+//            proc.waitFor(60, TimeUnit.MINUTES)
             return proc.inputStream.bufferedReader().readText()
         } catch (e: IOException) {
             e.printStackTrace()
@@ -65,11 +63,7 @@ class MainActivity : AppCompatActivity() {
                 return false
             }
             val checkPermission = listOf("su", "-s", "ls").runCommand(File("/system"))
-            if (checkPermission != "") {
-                return true
-            } else {
-                return false
-            }
+            return checkPermission != ""
         }
 
         fun checkZapretFile(): Boolean {
@@ -89,6 +83,9 @@ class MainActivity : AppCompatActivity() {
                     tvStatusSub.text = "pid: $zapretStatusCMD"
                 }
             } else {
+                //btnDownload.visibility = View.VISIBLE
+                btnStart.visibility = View.GONE
+                btnStop.visibility = View.GONE
                 tvStatus.text = getString(R.string.zapret_not_found)
             }
         }
@@ -127,6 +124,10 @@ class MainActivity : AppCompatActivity() {
                 listOf("su", "-c", "zapret", "stop")
                     .runCommand(File("/system")).toString())
             updateStatus()
+        }
+
+        btnDownload.setOnClickListener {
+
         }
     }
 }
