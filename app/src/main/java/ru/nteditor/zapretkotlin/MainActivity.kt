@@ -6,9 +6,11 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.io.File
 import java.io.IOException
 import java.util.concurrent.TimeUnit
@@ -52,9 +54,12 @@ class MainActivity : AppCompatActivity() {
 
         fun checkSUFile(): Boolean {
             fun checkFile(): Boolean {
-                return File("/system/bin/su").exists() || File("/system/xbin/su").exists() || File("/system/sbin/su").exists() || File(
-                    "/bin/su"
-                ).exists() || File("/xbin/su").exists() || File("/sbin/su").exists()
+                return File("/system/bin/su").exists() ||
+                        File("/system/xbin/su").exists() ||
+                        File("/system/sbin/su").exists() ||
+                        File("/bin/su").exists() ||
+                        File("/xbin/su").exists() ||
+                        File("/sbin/su").exists()
             }
             if (!checkFile()) {
                 return false
@@ -98,16 +103,30 @@ class MainActivity : AppCompatActivity() {
             updateStatus()
         }
 
+        fun alert(title: String, message: String) {
+            MaterialAlertDialogBuilder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setNegativeButton(getString(R.string.alert_close)) {
+                    dialog, _ -> dialog.dismiss()
+                }
+                .show()
+
+
+        }
 
         btnStart.setOnClickListener {
-            val outputCMD =
-                listOf("su", "-c", "zapret", "start").runCommand(File("/system"))
+            alert(getString(R.string.zapret_alert_start),
+                listOf("su", "-c", "zapret", "start")
+                    .runCommand(File("/system")).toString())
             updateStatus()
         }
 
         btnStop.setOnClickListener {
-            val outputCMD = listOf("su", "-c", "zapret", "stop").runCommand(File("/system"))
-        updateStatus()
+            alert(getString(R.string.zapret_alert_stop),
+                listOf("su", "-c", "zapret", "stop")
+                    .runCommand(File("/system")).toString())
+            updateStatus()
         }
     }
 }

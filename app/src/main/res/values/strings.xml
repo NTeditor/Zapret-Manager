@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Zapret Kotlin</string>
     <string name="zapret_button_start">Start</string>
@@ -8,5 +9,7 @@
     <string name="zapret_status_disable">Zapret is disable</string>
     <string name="su_not_found">SU file not found</string>
     <string name="zapret_not_found">Zapret file not found</string>
-    <string name="placeholder_text">Placeholder 1</string>
+    <string name="zapret_alert_start">Zapret launched</string>
+    <string name="zapret_alert_stop">Zapret stopped</string>
+    <string name="alert_close">Close</string>
 </resources>
