@@ -77,11 +77,15 @@ class MainActivity : AppCompatActivity() {
                 val zapretStatusCMD =
                     listOf("su", "-c", "pidof", "nfqws").runCommand(File("/system/bin"))
                 if (zapretStatusCMD == "") {
+                    btnStop.visibility = View.GONE
+                    btnStart.visibility = View.VISIBLE
                     tvStatus.text = getString(R.string.zapret_status_disable)
                     tvStatusPid.visibility = View.INVISIBLE
                     tvStatusNumber.text = ""
 
                 } else {
+                    btnStart.visibility = View.GONE
+                    btnStop.visibility = View.VISIBLE
                     tvStatus.text = getString(R.string.zapret_status_enable)
                     tvStatusPid.visibility = View.VISIBLE
                     tvStatusNumber.text = zapretStatusCMD
