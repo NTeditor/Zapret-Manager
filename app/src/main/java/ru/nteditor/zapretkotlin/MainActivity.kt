@@ -2,15 +2,16 @@ package ru.nteditor.zapretkotlin
 
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.io.File
 import java.io.IOException
-import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,18 +24,13 @@ class MainActivity : AppCompatActivity() {
                 .redirectError(ProcessBuilder.Redirect.PIPE)
                 .start()
 
-            proc.waitFor(60, TimeUnit.MINUTES)
+//            proc.waitFor(60, TimeUnit.MINUTES)
             return proc.inputStream.bufferedReader().readText()
         } catch (e: IOException) {
             e.printStackTrace()
             return null
         }
     }
-
-    private fun checkZapretFile(): Boolean {
-        return File("/system/bin/zapret").exists()
-    }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,77 +42,97 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        val textTester1 = findViewById<TextView>(R.id.textTester1)
-        val zapretButtonStop = findViewById<Button>(R.id.zapretButtonStop)
-        val zapretButtonStart = findViewById<Button>(R.id.zapretButtonStart)
-        val zapretStatusCard = findViewById<TextView>(R.id.zapretStatusCard)
-        val zapretPidText = findViewById<TextView>(R.id.zapretPidText)
-        val downloadButton = findViewById<TextView>(R.id.downloadButton)
+        val btnDownload = findViewById<TextView>(R.id.btnDownload)
+        val btnStart = findViewById<Button>(R.id.btnStart)
+        val btnStop = findViewById<Button>(R.id.btnStop)
+
+        val tvStatus = findViewById<TextView>(R.id.tvStatus)
+        val tvStatusPid = findViewById<TextView>(R.id.tvStatusPid)
+        val tvStatusNumber = findViewById<TextView>(R.id.tvStatusNumber)
 
 
-        fun zapretCheckStatus() {
-            val zapretStatusCMD =
-                listOf("su", "-c", "pidof", "nfqws").runCommand(File("/system/bin"))
-            if (zapretStatusCMD == "") {
-                val zapretStatus = getString(R.string.zapret_status_disable)
-                zapretStatusCard.text = zapretStatus
-                zapretPidText.text = ""
-
-            } else {
-                val zapretStatus = getString(R.string.zapret_status_enable)
-                zapretStatusCard.text = zapretStatus
-                zapretPidText.text = "pid: $zapretStatusCMD"
-            }
-
-
-        }
 
         fun checkSUFile(): Boolean {
-            return File("/system/bin/su").exists() || File("/system/xbin/su").exists() || File("/system/sbin/su").exists()
+            fun checkFile(): Boolean {
+                return File("/system/bin/su").exists() ||
+                        File("/system/xbin/su").exists() ||
+                        File("/system/sbin/su").exists() ||
+                        File("/bin/su").exists() ||
+                        File("/xbin/su").exists() ||
+                        File("/sbin/su").exists()
+            }
+            if (!checkFile()) {
+                return false
+            }
+            val checkPermission = listOf("su", "-s", "ls").runCommand(File("/system"))
+            return checkPermission != ""
         }
 
-        if (checkSUFile()) {
+        fun checkZapretFile(): Boolean {
+            return File("/system/bin/zapret").exists()
+        }
+
+        fun updateStatus() {
             if (checkZapretFile()) {
-                zapretCheckStatus()
+                val zapretStatusCMD =
+                    listOf("su", "-c", "pidof", "nfqws").runCommand(File("/system/bin"))
+                if (zapretStatusCMD == "") {
+                    tvStatus.text = getString(R.string.zapret_status_disable)
+                    tvStatusPid.visibility = View.INVISIBLE
+                    tvStatusNumber.text = ""
+
+                } else {
+                    tvStatus.text = getString(R.string.zapret_status_enable)
+                    tvStatusPid.visibility = View.VISIBLE
+                    tvStatusNumber.text = zapretStatusCMD
+                }
             } else {
-                zapretStatusCard.text = getString(R.string.zapret_not_found)
+                //btnDownload.visibility = View.VISIBLE
+                btnStart.visibility = View.GONE
+                btnStop.visibility = View.GONE
+                tvStatus.text = getString(R.string.zapret_not_found)
             }
+        }
+
+        if (!checkSUFile()) {
+            btnDownload.visibility = View.GONE
+            btnStart.visibility = View.GONE
+            btnStop.visibility = View.GONE
+
+            tvStatus.text = getString(R.string.su_not_found)
         } else {
-            zapretStatusCard.text = getString(R.string.su_not_found)
+            updateStatus()
         }
 
-
-        zapretButtonStart.setOnClickListener {
-            if (checkSUFile()) {
-                if (checkZapretFile()) {
-                    val outputCMD =
-                        listOf("su", "-c", "zapret", "start").runCommand(File("/system"))
-                    textTester1.text = outputCMD
-                    zapretCheckStatus()
-                } else {
-                    zapretStatusCard.text = getString(R.string.zapret_not_found)
-
+        fun alert(title: String, message: String) {
+            MaterialAlertDialogBuilder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setNegativeButton(getString(R.string.alert_close)) {
+                    dialog, _ -> dialog.dismiss()
                 }
-            } else {
-                zapretStatusCard.text = getString(R.string.su_not_found)
-
-            }
+                .show()
 
 
         }
 
-        zapretButtonStop.setOnClickListener {
-            if (checkSUFile()) {
-                if (checkZapretFile()) {
-                    val outputCMD = listOf("su", "-c", "zapret", "stop").runCommand(File("/system"))
-                    textTester1.text = outputCMD
-                    zapretCheckStatus()
-                } else {
-                    zapretStatusCard.text = getString(R.string.zapret_not_found)
-                }
-            } else {
-                zapretStatusCard.text = getString(R.string.su_not_found)
-            }
+        btnStart.setOnClickListener {
+            alert(getString(R.string.zapret_alert_start),
+                listOf("su", "-c", "zapret", "start")
+                    .runCommand(File("/system")).toString())
+            updateStatus()
+        }
+
+        btnStop.setOnClickListener {
+            alert(getString(R.string.zapret_alert_stop),
+                listOf("su", "-c", "zapret", "stop")
+                    .runCommand(File("/system")).toString())
+            updateStatus()
+        }
+
+
+
+        btnDownload.setOnClickListener {
 
         }
     }

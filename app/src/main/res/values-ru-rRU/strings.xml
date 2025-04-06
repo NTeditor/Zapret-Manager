@@ -9,5 +9,8 @@
     <string name="zapret_status_disable">Zapret выключен</string>
     <string name="su_not_found">Файл SU не найден</string>
     <string name="zapret_not_found">Файл zapret не найден</string>
-    <string name="placeholder_text">Placeholder 1</string>
+    <string name="zapret_alert_start">Zapret запущен</string>
+    <string name="zapret_alert_stop">Zapret остановлен</string>
+    <string name="alert_close">Закрыть</string>
+    <string name="pid">pid:</string>
 </resources>
