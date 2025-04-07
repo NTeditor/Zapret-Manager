@@ -2,7 +2,7 @@ package ru.nteditor.zapretkotlin
 
 import java.io.File
 
-class IsShell() {
+class IsShell {
 
     private fun isSUFile(): Boolean {
         fun isFile(): Boolean {

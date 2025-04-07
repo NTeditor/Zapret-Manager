@@ -58,14 +58,14 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        if (!IsShell().isRoot()) {
+        if (IsShell().isRoot()) {
+            updateStatus()
+        } else {
             btnDownload.visibility = View.GONE
             btnStart.visibility = View.GONE
             btnStop.visibility = View.GONE
 
             tvStatus.text = getString(R.string.su_not_found)
-        } else {
-            updateStatus()
         }
 
         fun alert(title: String, message: String) {
@@ -80,13 +80,13 @@ class MainActivity : AppCompatActivity() {
 
         btnStart.setOnClickListener {
             alert(getString(R.string.zapret_alert_start),
-                Shell(listOf("su", "-c", "zapret", "start")).start().toString())
+                Shell(listOf("su", "-c", "zapret", "start")).start())
             updateStatus()
         }
 
         btnStop.setOnClickListener {
             alert(getString(R.string.zapret_alert_stop),
-                Shell(listOf("su", "-c", "zapret", "stop")).start().toString())
+                Shell(listOf("su", "-c", "zapret", "stop")).start())
             updateStatus()
         }
 

@@ -8,7 +8,7 @@ import java.lang.IllegalArgumentException
 class Shell(private val command: List<String>) {
 
 
-    private fun List<String>.runCommand(): String? {
+    private fun List<String>.runCommand(): String {
         try {
             val proc = ProcessBuilder(this)
                 .directory(File("/"))
@@ -19,18 +19,18 @@ class Shell(private val command: List<String>) {
             return proc.inputStream.bufferedReader().readText()
         } catch (e: IOException) {
             e.printStackTrace()
-            return null
+            return "Error"
         }
     }
 
     private fun getCommand(): List<String> {
-        if (command.isNotEmpty()) {
-            return command
+        if (command == listOf("")) {
+            throw IllegalArgumentException("Command list is empty")
         }
-        throw IllegalArgumentException("Command list is empty")
+        return command
     }
 
-    fun start(): String? {
+    fun start(): String {
         return getCommand().runCommand()
     }
 
