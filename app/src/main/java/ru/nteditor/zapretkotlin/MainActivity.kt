@@ -10,27 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import java.io.File
-import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
-
-
-    private fun List<String>.runCommand(workingDir: File): String? {
-        try {
-            val proc = ProcessBuilder(this)
-                .directory(workingDir)
-                .redirectOutput(ProcessBuilder.Redirect.PIPE)
-                .redirectError(ProcessBuilder.Redirect.PIPE)
-                .start()
-
-//            proc.waitFor(60, TimeUnit.MINUTES)
-            return proc.inputStream.bufferedReader().readText()
-        } catch (e: IOException) {
-            e.printStackTrace()
-            return null
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,30 +33,9 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        fun checkSUFile(): Boolean {
-            fun checkFile(): Boolean {
-                return File("/system/bin/su").exists() ||
-                        File("/system/xbin/su").exists() ||
-                        File("/system/sbin/su").exists() ||
-                        File("/bin/su").exists() ||
-                        File("/xbin/su").exists() ||
-                        File("/sbin/su").exists()
-            }
-            if (!checkFile()) {
-                return false
-            }
-            val checkPermission = listOf("su", "-s", "ls").runCommand(File("/system"))
-            return checkPermission != ""
-        }
-
-        fun checkZapretFile(): Boolean {
-            return File("/system/bin/zapret").exists()
-        }
-
         fun updateStatus() {
-            if (checkZapretFile()) {
-                val zapretStatusCMD =
-                    listOf("su", "-c", "pidof", "nfqws").runCommand(File("/system/bin"))
+            if (IsShell().isZapret()) {
+                val zapretStatusCMD = Shell(listOf("su", "-c", "pidof", "nfqws")).start()
                 if (zapretStatusCMD == "") {
                     btnStop.visibility = View.GONE
                     btnStart.visibility = View.VISIBLE
@@ -98,7 +58,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        if (!checkSUFile()) {
+        if (!IsShell().isRoot()) {
             btnDownload.visibility = View.GONE
             btnStart.visibility = View.GONE
             btnStop.visibility = View.GONE
@@ -116,21 +76,17 @@ class MainActivity : AppCompatActivity() {
                     dialog, _ -> dialog.dismiss()
                 }
                 .show()
-
-
         }
 
         btnStart.setOnClickListener {
             alert(getString(R.string.zapret_alert_start),
-                listOf("su", "-c", "zapret", "start")
-                    .runCommand(File("/system")).toString())
+                Shell(listOf("su", "-c", "zapret", "start")).start().toString())
             updateStatus()
         }
 
         btnStop.setOnClickListener {
             alert(getString(R.string.zapret_alert_stop),
-                listOf("su", "-c", "zapret", "stop")
-                    .runCommand(File("/system")).toString())
+                Shell(listOf("su", "-c", "zapret", "stop")).start().toString())
             updateStatus()
         }
 
