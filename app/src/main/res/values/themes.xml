@@ -1,14 +1,7 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Base.Theme.ZapretKotlin" parent="Theme.Material3.DynamicColors.DayNight.NoActionBar">
 
-    </style>
-
-    <style name="Button">
-        <item name="android:layout_marginHorizontal">10dp</item>
-    </style>
-    <style name="Text">
-        <item name="android:textColor">?attr/colorOnTertiary</item>
     </style>
 
 
