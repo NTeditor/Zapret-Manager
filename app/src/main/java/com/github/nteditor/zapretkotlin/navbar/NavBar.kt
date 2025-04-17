@@ -2,9 +2,9 @@ package com.github.nteditor.zapretkotlin.navbar
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Build
-import androidx.compose.material.icons.rounded.Home
-import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material.icons.outlined.Build
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -21,6 +22,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.github.nteditor.zapretkotlin.R
 import com.github.nteditor.zapretkotlin.screen.Home
 import com.github.nteditor.zapretkotlin.screen.Experimental
 import com.github.nteditor.zapretkotlin.screen.About
@@ -40,10 +42,12 @@ object About
 @Composable
 fun NavBar() {
     val topLevelRoute = listOf(
-        TopLevelRoute("Home", Home, Icons.Rounded.Home),
-        TopLevelRoute("Experimental", Experimental, Icons.Rounded.Build),
-        TopLevelRoute("About", About, Icons.Rounded.Info)
+        TopLevelRoute(stringResource(R.string.NavBar_Home), Home, Icons.Outlined.Home),
+        TopLevelRoute(stringResource(R.string.NavBar_Experimental), Experimental, Icons.Outlined.Build),
+        TopLevelRoute(stringResource(R.string.NavBar_About), About, Icons.Outlined.Info)
     )
+
+
 
     val navController = rememberNavController()
     Scaffold(
