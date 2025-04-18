@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="NavBar_Home">Главная</string>
+    <string name="NavBar_Experimental">Эксперименты</string>
     <string name="NavBar_About">О Приложении</string>
+    <string name="zapret_enable">Zapret запущен</string>
+    <string name="btn_zapret_enable">Запустить</string>
+    <string name="btn_zapret_disable">Остановить</string>
+    <string name="btn_zapret_download">Скачать</string>
+    <string name="not_root">SU файл не найден</string>
+    <string name="zapret_not_found">Zapret не найден</string>
+    <string name="zapret_disable">Zapret остановлен</string>
+
+    <string name="btn_zapret_toast_start">Запуск..</string>
+    <string name="btn_zapret_toast_stop">Остановка..</string>
+    <string name="btn_zapret_toast_download">Не реализовано</string>
 </resources>

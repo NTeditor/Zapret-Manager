@@ -2,7 +2,6 @@ package com.github.nteditor.zapretkotlin
 
 import java.io.File
 import java.io.IOException
-import java.lang.IllegalArgumentException
 
 
 class Shell(private val command: List<String>) {
@@ -33,5 +32,4 @@ class Shell(private val command: List<String>) {
     fun start(): String {
         return getCommand().runCommand()
     }
-
 }

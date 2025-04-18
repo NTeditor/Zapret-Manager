@@ -1,6 +1,17 @@
 <resources>
     <string name="app_name" translatable="false">Zapret</string>
     <string name="NavBar_Home">Home</string>
-    <string name="NavBar_Experimental" translatable="false">Experimental</string>
+    <string name="NavBar_Experimental">Experimental</string>
     <string name="NavBar_About">About</string>
+    <string name="zapret_enable">Zapret running</string>
+    <string name="btn_zapret_enable">Start</string>
+    <string name="btn_zapret_disable">Stop</string>
+    <string name="btn_zapret_download">Download</string>
+    <string name="not_root">SU file not found</string>
+    <string name="zapret_not_found">Zapret file not found</string>
+    <string name="zapret_disable">zapret not running</string>
+
+    <string name="btn_zapret_toast_start">Starting..</string>
+    <string name="btn_zapret_toast_stop">Stopping..</string>
+    <string name="btn_zapret_toast_download">Not implemented</string>
 </resources>

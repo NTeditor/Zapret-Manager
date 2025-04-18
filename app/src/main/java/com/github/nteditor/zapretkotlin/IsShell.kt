@@ -31,4 +31,27 @@ class IsShell {
     fun isRoot(): Boolean {
         return isSUFile()
     }
+
+    fun zapretStatus(): Int {
+        return if (isZapret()) {
+            val zapretStatusCMD = Shell(listOf("su", "-c", "pidof", "nfqws")).start()
+            return if (zapretStatusCMD == "") {
+                0
+            } else {
+                1
+            }
+        } else {
+            2
+        }
+    }
+
+    fun getZapretPid(): String {
+        val output = Shell(listOf("su", "-c", "pidof", "nfqws")).start()
+        return if(output == "") {
+            ""
+        } else {
+            "pid: ${output.replace("\n", "")}"
+        }
+    }
+
 }
